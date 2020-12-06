@@ -46,7 +46,7 @@
                                 <h6>{{ keranjang.name }}</h6>
                                 </div>
                             </td>
-                            <td @click="removeItem(keranjangUser.index)" class="si-close">
+                            <td @click="removeItem(keranjang.id)" class="si-close">
                                 <i class="ti-close"></i>
                             </td>
                             </tr>
@@ -88,10 +88,20 @@
         };
     },
     methods: {
-        removeItem(index) {
-        this.keranjangUser.splice(index, 1);
-        const parsed = JSON.stringify(this.keranjangUser);
-        localStorage.setItem("keranjangUser", parsed);
+        removeItem(idx) {
+            
+            //cari tau id dari item yang dihapus
+            let  keranjangUserStorage =JSON.parse(localStorage.getItem("keranjangUser"));
+            let itemKeranjangUserStorage = keranjangUserStorage.map(itemKeranjangUserStorage=>itemKeranjangUserStorage.id);
+
+            // cocokan id yang ada di storage
+            let index = itemKeranjangUserStorage.findIndex(id => id == idx);
+            this.keranjangUser.splice(index,1);
+
+            const parsed = JSON.stringify(this.keranjangUser);
+            localStorage.setItem("keranjangUser", parsed);
+            window.location.reload();
+            
         }
     },
     mounted() {
